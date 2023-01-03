@@ -25,21 +25,21 @@ Dự án nhóm 4 thành viên:
 1. Admin là người quản lý các sản phẩm, loại , duyệt các đơn hàng, xem thông tin người dùng( trừ mật khẩu)
 2. Người dùng: xem và mua sản phẩm
 ###### Function Requirement
-<h6>Người dùng</h6>
+<h4>Người dùng</h4>
 1. Đăng nhập bằng tên đăng nhập và mật khẩu đã được tạo nếu chưa có thì sang thao tác đăng ký<br><br>
 2. Để đăng ký người dùng nhập vào họ tên, tài khoản, số điện thoại( = 10 và không tồn tại trong db), địa chỉ, mật khẩu và nhấn đăng ký<br><br>
 3. Chỉnh sửa thông tin người dùng: Sau khi đăng nhập thành công người dùng chọn tên tài khoản ở góc trên bên phải để mở dropdown menu, tại đây người dùng chọn thông tin để chuyển sang trang chỉnh sửa thông tin
 sau khi người dùng chỉnh sửa xong ấn thay đổi để lưu<br><br>
 4. Lọc sản phẩm theo loại: tại trang chủ người dùng có thể lọc sản phẩm theo cái loại được hiển thị trong navbar loại<br><br>
 5. Thêm sản phẩm vào giỏ: tại sản phẩm người dùng chọn thêm vào giỏ hàng để thêm sản phẩm muốn chọn vào giỏ hàng( với sản phẩm được chọn 2 lần trở lên hệ thống sẽ cộng vào số lượng tương ứng với số lần sản phẩm được chọn)<br><br>
-6. Giỏ hàng: Tại giỏ hàng người dùng có thể thực hiện các thao tác:<br>
+6. Giỏ hàng: Tại giỏ hàng người dùng có thể thực hiện các thao tác:
 * Chỉnh sửa số lượng<br>
 * Xoá sản phẩm khỏi giỏ hàng( xoá 1 hoặc nhiều sản phẩm)<br>
 * Thêm sản phẩm khác vào giỏ hàng( khi click hệ thống sẽ chuyển sang trang hiển thị sản phẩm)<br>
 * Thanh toán ( đơn hàng sẽ được chuyển sang lịch sử với trạng thái chờ duyệt với đơn hàng chưa giao và đã duyệt với các đơn hàng đã giao)<br><br>
 7. Lịch sử: Người dùng có thể xem lại các lịch sử giao dịch trước đó<br><br>
 8. Đăng xuất: Để kết thúc phiên làm việc người dùng có thể click vào đăng xuất bên dưới thông tin để tiến hành đăng xuất khỏi hệ thống<br><br>
-<h6>Admin</h6>
+<h4>Admin</h4>
 1. Đăng nhập bằng tên đăng nhập và mật khẩu<br><br>
 2. Thêm Loại: admin chọn lựa chọn để mở dropdown menu và chọn thêm loại hệ thống sẽ chuyển sang trang thêm loại, tại đây người dùng chọn thêm loại để xác nhận thêm<br><br>
 3. Sửa loại: admin chọn sửa để chuyển sang trang sửa loại, tại đây admin có thể tiến hành sửa tên loại<br><br>
