@@ -1,0 +1,88 @@
+from flask import render_template, session, request, redirect, url_for, flash
+from apps.sanpham.models import addsp,Category
+from apps import app, db, bcrypt
+from .forms import RegistrationForm, LoginForm
+from .models import User
+from apps.sanpham.models import Hoadon
+from apps.khachhang.models import Khachhang
+@app.route('/')
+def admin():
+    #bắt đầu minh code#
+    if 'username' not in session:
+        flash(f'Vui lòng đăng nhập trước','danger')
+        return redirect(url_for('login'))
+    #kết thúc#
+    sanpham = addsp.query.all()
+    return render_template('admin/index.html',title="Admin Page",sanpham=sanpham)
+
+@app.route('/categories')
+def categories():
+    #bắt đầu minh code#
+    if 'username' not in session:
+        flash(f'Vui lòng đăng nhập trước','danger')
+        return redirect(url_for('login'))
+    #kết thúc#
+    categories = Category.query.order_by(Category.id.desc()).all()
+    return render_template('admin/categories.html', title='Quản lý loại',categories=categories)
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm(request.form)
+    if request.method == 'POST' and form.validate():
+        hash_password = bcrypt.generate_password_hash(form.password.data)
+        user = User(name=form.name.data,username=form.username.data,phone=form.phone.data,
+                    address=form.address.data,password=hash_password)
+        db.session.add(user)
+        db.session.commit()
+        flash(f'Đăng ký thành công','success')
+        return redirect(url_for('login'))
+    return render_template('admin/register.html', form=form)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm(request.form)
+    if request.method == "POST" and form.validate():
+        user = User.query.filter_by(username = form.username.data).first()
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            session['username'] = form.username.data
+            flash(f'Chúc mừng {form.username.data} đăng nhập thành công','success')
+            return redirect(request.args.get('next') or url_for('admin'))
+        else:
+            flash('Sai tài khoản hoặc mật khẩu, vui lòng nhập lại','danger')
+            
+    return render_template('admin/login.html', form=form, title="Login now!")
+
+@app.route('/logout')
+def logout():
+    session.pop('username')
+    return redirect(url_for('login'))
+
+@app.route('/khach')
+def khach():
+    #bắt đầu minh code#
+    if 'username' not in session:
+        flash(f'Vui lòng đăng nhập trước','danger')
+        return redirect(url_for('login'))
+    #kết thúc#
+    khach = Khachhang.query.order_by(Khachhang.id.desc()).all()
+    return render_template('admin/khach.html', title='Quản lý khách hàng',khach=khach)
+
+@app.route('/duyet')
+def duyet():
+    if 'username' not in session:
+        flash(f'Vui lòng đăng nhập trước','danger')
+        return redirect(url_for('dangnhap'))
+    lichsu = Hoadon.query.order_by(Hoadon.id.desc()).all()
+    return render_template('admin/duyet.html', title='Duyệt đơn hàng',lichsu=lichsu)
+
+@app.route('/xacnhan/<int:id>', methods=['GET', 'POST'])
+def xacnhan(id):
+    if 'username' not in session:
+        flash(f'Vui lòng đăng nhập trước','danger')
+        return redirect(url_for('dangnhap'))
+    if request.method == "POST":
+        xacnhan = Hoadon.query.get_or_404(id)
+        xacnhan.trangthai = 'Đã giao'
+        db.session.commit()
+        return redirect(url_for('duyet'))
+    

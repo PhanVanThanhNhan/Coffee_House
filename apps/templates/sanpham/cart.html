@@ -1,0 +1,98 @@
+{% extends 'layout.html' %}
+{% block content %}
+<nav style="border-bottom: 1px solid #e7e7e7; position:fixed; z-index: 99; top: 0; right: 0; left: 0;"
+    class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{{url_for('home')}}">Trang chủ</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav" style="margin-right: 675px;">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    Loại
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% for cate in category %}
+                    <a class="dropdown-item" href="{{url_for('get_category', id=cate.id)}}">{{cate.name}}</a>
+                    {% endfor %}
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="{{url_for('getCart')}}" class="nav-link"> Giỏ hàng ({{ session['Shoppingcart']|length }}) </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{url_for('lichsu')}}" class="nav-link"> Lịch sử </a>
+            </li>
+        </ul>
+        
+        <ul class="navbar-nav" style="margin-left: 340px;">
+            {% if session['taikhoan'] !=null %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    {{session['taikhoan']}} 
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{url_for('thongtincanhan', taikhoan = session['taikhoan'])}}"><i class="fa-solid fa-user"></i> Thông tin</a>
+                    <a class="dropdown-item" href="/dangxuat"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a>
+                </div>
+            </li>
+            {% else %}
+            <li class="nav-item" style="border: 0.5px solid #222222; background-color: aqua; border-radius: 4px;padding: 0px 5px 0px 5px;">
+                <a href="/dangnhap" class="nav-link"><i class="fa-solid fa-right-to-bracket"></i> Đăng nhập </a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+<div class="container" style="margin-top: 80px;">
+    {% include '_messages.html' %}
+    <div class="row">
+        <div class="col-md-12">
+        <table class="table table-sm">
+            <thead>
+                <th>STT</th>
+                <th>Hình ảnh</th>
+                <th>Tên gọi</th>
+                <th>Đơn Giá</th>
+                <th>Số lượng</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </thead>
+            <tbody>
+                {% for key, sanpham in session['Shoppingcart'].items() %}
+                <!-- {% set discount = sanpham.price|float %} -->
+                <tr>
+                    <td>{{loop.index}}</td>
+                    <td><img src="{{url_for('static',filename='images/'+ sanpham.image)}}" alt="{{sanpham.name}}" width="50" height="45"></td>
+                    <td>{{sanpham.name}}</td>
+                    <td>{{sanpham.price}}</td>
+                    <form action="{{url_for('updatecart', code=key)}}" method="post">
+                      <td> <input type="number" name="quantity" min="1" max="99" value="{{sanpham.quantity}}"> </td>
+                      <td><button type="submit" class="btn btn-sm btn-info">Update</button> </td>
+                      </form>
+                    <td> <a href="{{url_for('deleteitem',id=key)}}" class="btn btn-sm btn-danger">Delete</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <table class="table table-sm">
+           <tr>
+               <td> <a href="{{url_for('home')}}" class="btn btn-primary"> Chọn thêm sản phẩm </a> </td> 
+               <form action="{{url_for('hoadon', taikhoan = session['taikhoan'], sotien = grandtotal)}}" method="POST">
+                 <td> <button class="btn btn-success" type="submit"> Đặt hàng </button> </td>
+               </form>
+               
+               <td width="35%"></td>
+               <td> <h5>Tổng tiền: {{grandtotal}}đ</h3> </td>
+                <td> <a href="{{url_for('clearcart')}}" class="btn btn-danger btn-sm float-right mr-4"> Xóa tất cả</a> </td>
+           </tr>
+        </table>
+    </div>
+  </div>
+</div>
+{% endblock content %}

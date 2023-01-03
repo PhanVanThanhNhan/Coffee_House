@@ -1,0 +1,79 @@
+{% extends 'layout.html' %}
+{% block content %}
+<nav style="border-bottom: 1px solid #e7e7e7; position:fixed; z-index: 99; top: 0; right: 0; left: 0;"
+    class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{{url_for('home')}}">Trang chủ</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav" style="margin-right: 675px;">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    Loại
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% for cate in category %}
+                    <a class="dropdown-item" href="{{url_for('get_category', id=cate.id)}}">{{cate.name}}</a>
+                    {% endfor %}
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="{{url_for('getCart')}}" class="nav-link"> Giỏ hàng ({{ session['Shoppingcart']|length }}) </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{url_for('lichsu')}}" class="nav-link"> Lịch sử </a>
+            </li>
+        </ul>
+        
+        <ul class="navbar-nav" style="margin-left: 340px;">
+            {% if session['taikhoan'] !=null %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    {{session['taikhoan']}} 
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{url_for('thongtincanhan', taikhoan = session['taikhoan'])}}"><i class="fa-solid fa-user"></i> Thông tin</a>
+                    <a class="dropdown-item" href="/dangxuat"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a>
+                </div>
+            </li>
+            {% else %}
+            <li class="nav-item" style="border: 0.5px solid #222222; background-color: aqua; border-radius: 4px;padding: 0px 5px 0px 5px;">
+                <a href="/dangnhap" class="nav-link"><i class="fa-solid fa-right-to-bracket"></i> Đăng nhập </a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+<div class="container" style="margin-top: 80px;">
+    {% include '_messages.html' %}
+    <div class="row">
+        <div class="col-md-12">
+        <table class="table table-sm">
+            <thead>
+                <th>STT</th>
+                <th>Số tiền</th>
+                <th>Ngày mua</th>
+                <th>Trạng thái</th>
+            </thead>
+            <tbody>
+                {% for ls in lichsu %}
+                <tr>
+                    <td>{{loop.index}}</td>
+                    <td>{{ls.sotien}} đ</td>
+                    <td>{{ls.ngaymua}}</td>
+                    <td>{{ls.trangthai}}</td>
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+    </div>
+  </div>
+</div>
+{% endblock content %}
